@@ -73,9 +73,8 @@ def download_Video_Audio(path, vid_url, quality, file_no):
 
     print("downloading", yt.filename + " Video and Audio...")
     try:
-        #bar = progressBar()
-        #video.download(path, on_progress=bar.print_progress, on_finish=bar.print_end)
-        video.download(path)
+        bar = progressBar()
+        video.download(path, on_progress=bar.print_progress, on_finish=bar.print_end)
         print("successfully downloaded", yt.filename, "!")
     except OSError:
         print(yt.filename, "already exists in this directory! Skipping video...")
