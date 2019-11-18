@@ -168,6 +168,12 @@ if __name__ == '__main__':
             print("User => ", end="")
             directory = input()
 
+            print("\nVeronica => Enter range for playlist, in format (start-last)")
+            print("User => ", end="")
+            range = input()
+
+            start,end=range.split('-')
+
             # make directory if dir specified doesn't exist
             try:
                 os.makedirs(directory, exist_ok=True)
@@ -181,7 +187,7 @@ if __name__ == '__main__':
             vid_urls_in_playlist = getPlaylistVideoUrls(playlist_page_content, url)
 
             # downloads videos and audios
-            for vid_url in enumerate(vid_urls_in_playlist):
+            for vid_url in enumerate(vid_urls_in_playlist[start],vid_urls_in_playlist[end]+1):
                 download_Video_Audio(directory, vid_url[1], quality)
                 time.sleep(1)
         else:
