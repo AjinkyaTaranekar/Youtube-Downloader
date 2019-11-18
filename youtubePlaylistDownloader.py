@@ -7,6 +7,7 @@ import time
 import os
 
 import pafy
+from pytube import YouTube
 
 def getPageHtml(url):
     try:
@@ -58,7 +59,7 @@ def getPlaylistVideoUrls(page_content, url):
 
 # function added to get audio files along with the video files from the playlist
 
-def download_Video_Audio(path, vid_url, quality, file_no):
+def download_Video_Audio(path, vid_url, quality):
     try:
         video = pafy.new(vid_url)
     except Exception as e:
@@ -89,8 +90,17 @@ def download_Video_Audio(path, vid_url, quality, file_no):
                     streams[i+1].download(path)
                     break
 
-        i += 1
+            i += 1
+        #downloading subtitle too.
+        ''' yt = YouTube(vid_url)
+        caption = yt.captions.get_by_language_code('en')
 
+        fileSubTitlePath=path+'/'+fileTitle+'.srt'
+        file1 = open(fileSubTitlePath, "w")  # write mode
+
+        file1.write(str(caption.generate_srt_captions()))
+        file1.close()
+        '''
         print("\nVeronica => Successfully downloaded", fileTitle, "!")
     except OSError:
         print("\nVeronica => Seems like ", fileTitle, "already exists in this directory! So, I am skipping video...")
@@ -135,7 +145,7 @@ if __name__ == '__main__':
             if not url.startswith("http"):
                 url = 'https://' + url
 
-            download_Video_Audio(directory, url, quality, 1)
+            download_Video_Audio(directory, url, quality)
 
         elif choice == 2:
             print("\nVeronica => Enter playlist url")
@@ -166,8 +176,8 @@ if __name__ == '__main__':
             vid_urls_in_playlist = getPlaylistVideoUrls(playlist_page_content, url)
 
             # downloads videos and audios
-            for i, vid_url in enumerate(vid_urls_in_playlist):
-                download_Video_Audio(directory, vid_url, quality, i)
+            for vid_url in enumerate(vid_urls_in_playlist):
+                download_Video_Audio(directory, vid_url, quality)
                 time.sleep(1)
         else:
             print("\nVeronica => OOPS, Pls. select from 1 or 2")
