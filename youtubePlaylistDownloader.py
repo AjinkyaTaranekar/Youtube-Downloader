@@ -16,7 +16,7 @@ class progressBar:
 
     def print_progress(self, cur, total, start):
         currentper = cur / total
-        elapsed = int(time.clock() - start) + 1
+        elapsed = int(time.process_time() - start) + 1
         curbar = int(currentper * self.barlength)
         bar = '\r[' + '='.join(['' for _ in range(curbar)])  # Draws Progress
         bar += '>'
@@ -124,17 +124,22 @@ def download_Video_Audio(path, vid_url, quality, file_no):
 
     print("downloading", fileTitle + " Video")
     try:
-        bar = progressBar()
         i = 1
         for vid in streams:
             #print(vid.mediatype=='normal' , vid.extension=='mp4' , str(quality) in vid.quality)
             path=path
             if (vid.mediatype=='normal' and vid.extension=='mp4'):
                 if str(quality) in vid.quality:
+                    bar = progressBar()
+                    bar.print_progress(vid.get_filesize(), video.length, 0)
+                    #bar.print_end()
                     vid.download(path)
                     break
                 else:
                     print(quality, "not found, downloading the next quality of ", streams[i+1].resolution)
+                    bar = progressBar()
+                    bar.print_progress(streams[i+1].get_filesize(), video.length, 0)
+                    #bar.print_end()
                     streams[i+1].download(path)
                     break
 
@@ -179,7 +184,7 @@ if __name__ == '__main__':
 
             download_Video_Audio(directory, url, quality, 1)
 
-        if choice == 2:
+        elif choice == 2:
             print("Enter playlist url")
             url = input()
             url = url.replace(" ", "")
