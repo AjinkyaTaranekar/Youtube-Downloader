@@ -151,33 +151,62 @@ def printUrls(vid_urls):
 
 
 if __name__ == '__main__':
-        print("Welcome to Youtube Playlist Downloader.")
-        print("Enter playlist url")
-        url = input()
-        url = url.replace(" ", "")
-        #url ="https://www.youtube.com/playlist?list=PLqM7alHXFySH8VivqUPnNFJ0kxgzgHrVb"
+        print("Welcome to Youtube Video Downloader.")
+        print("1. Video \n2. Playlist")
+        choice = int(input())
+        if choice ==1:
+            print("Enter video url")
+            url = input()
+            url = url.replace(" ", "")
+            # url ="https://www.youtube.com/playlist?list=PLqM7alHXFySH8VivqUPnNFJ0kxgzgHrVb"
 
-        print("Enter prefered quality of videos")
-        quality = input()
-        #quality=720
+            print("Enter prefered quality of video")
+            quality = input()
+            # quality=720
 
-        print("Enter directory url")
-        directory = input()
+            print("Enter directory url")
+            directory = input()
 
-        # make directory if dir specified doesn't exist
-        try:
-            os.makedirs(directory, exist_ok=True)
-        except OSError as e:
-            print(e.reason)
-            exit(1)
+            # make directory if dir specified doesn't exist
+            try:
+                os.makedirs(directory, exist_ok=True)
+            except OSError as e:
+                print(e.reason)
+                exit(1)
 
-        if not url.startswith("http"):
-            url = 'https://' + url
+            if not url.startswith("http"):
+                url = 'https://' + url
 
-        playlist_page_content = getPageHtml(url)
-        vid_urls_in_playlist = getPlaylistVideoUrls(playlist_page_content, url)
+            download_Video_Audio(directory, url, quality, 1)
 
-        # downloads videos and audios
-        for i, vid_url in enumerate(vid_urls_in_playlist):
-            download_Video_Audio(directory, vid_url, quality, i)
-            time.sleep(1)
+        if choice == 2:
+            print("Enter playlist url")
+            url = input()
+            url = url.replace(" ", "")
+            # url ="https://www.youtube.com/playlist?list=PLqM7alHXFySH8VivqUPnNFJ0kxgzgHrVb"
+
+            print("Enter prefered quality of videos")
+            quality = input()
+            # quality=720
+
+            print("Enter directory url")
+            directory = input()
+
+            # make directory if dir specified doesn't exist
+            try:
+                os.makedirs(directory, exist_ok=True)
+            except OSError as e:
+                print(e.reason)
+                exit(1)
+
+            if not url.startswith("http"):
+                url = 'https://' + url
+            playlist_page_content = getPageHtml(url)
+            vid_urls_in_playlist = getPlaylistVideoUrls(playlist_page_content, url)
+
+            # downloads videos and audios
+            for i, vid_url in enumerate(vid_urls_in_playlist):
+                download_Video_Audio(directory, vid_url, quality, i)
+                time.sleep(1)
+        else:
+            print("Pls. select from 1 or 2")
