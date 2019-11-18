@@ -6,8 +6,58 @@ import sys
 import time
 import os
 
-from pytube import YouTube
+import pafy
 
+class progressBar:
+    def __init__(self, barlength=25):
+        self.barlength = barlength
+        self.position = 0
+        self.longest = 0
+
+    def print_progress(self, cur, total, start):
+        currentper = cur / total
+        elapsed = int(time.clock() - start) + 1
+        curbar = int(currentper * self.barlength)
+        bar = '\r[' + '='.join(['' for _ in range(curbar)])  # Draws Progress
+        bar += '>'
+        bar += ' '.join(['' for _ in range(int(self.barlength - curbar))]) + '] '  # Pads remaining space
+        bar += bytestostr(cur / elapsed) + '/s '  # Calculates Rate
+        bar += getHumanTime((total - cur) * (elapsed / cur)) + ' left'  # Calculates Remaining time
+        if len(bar) > self.longest:  # Keeps track of space to over write
+            self.longest = len(bar)
+            bar += ' '.join(['' for _ in range(self.longest - len(bar))])
+        sys.stdout.write(bar)
+
+    def print_end(self, *args):  # Clears Progress Bar
+        sys.stdout.write('\r{0}\r'.format((' ' for _ in range(self.longest))))
+
+
+def getHumanTime(sec):
+    if sec >= 3600:  # Converts to Hours
+        return '{0:d} hour(s)'.format(int(sec / 3600))
+    elif sec >= 60:  # Converts to Minutes
+        return '{0:d} minute(s)'.format(int(sec / 60))
+    else:  # No Conversion
+        return '{0:d} second(s)'.format(int(sec))
+
+
+def bytestostr(bts):
+    bts = float(bts)
+    if bts >= 1024 ** 4:  # Converts to Terabytes
+        terabytes = bts / 1024 ** 4
+        size = '%.2fTb' % terabytes
+    elif bts >= 1024 ** 3:  # Converts to Gigabytes
+        gigabytes = bts / 1024 ** 3
+        size = '%.2fGb' % gigabytes
+    elif bts >= 1024 ** 2:  # Converts to Megabytes
+        megabytes = bts / 1024 ** 2
+        size = '%.2fMb' % megabytes
+    elif bts >= 1024:  # Converts to Kilobytes
+        kilobytes = bts / 1024
+        size = '%.2fKb' % kilobytes
+    else:  # No Conversion
+        size = '%.2fb' % bts
+    return size
 
 def getPageHtml(url):
     try:
@@ -61,35 +111,38 @@ def getPlaylistVideoUrls(page_content, url):
 
 def download_Video_Audio(path, vid_url, quality, file_no):
     try:
-        yt = YouTube(vid_url)
+        video = pafy.new(vid_url)
     except Exception as e:
         print("Error:", str(e), "- Skipping Video with url '" + vid_url + "'.")
         return
 
-    try:  # Tries to find the video in 720p
-        video = yt.get('mp4', quality+'p')
-    except Exception:  # Sorts videos by resolution and picks the highest quality video if a 720p video doesn't exist
-        video = sorted(yt.filter("mp4"), key=lambda video: int(video.resolution[:-1]), reverse=True)[0]
+    streams = video.streams
+    for i in streams:
+        print(i)
 
-    print("downloading", yt.filename + " Video and Audio...")
+    fileTitle=video.title
+
+    print("downloading", fileTitle + " Video")
     try:
         bar = progressBar()
-        video.download(path, on_progress=bar.print_progress, on_finish=bar.print_end)
-        print("successfully downloaded", yt.filename, "!")
-    except OSError:
-        print(yt.filename, "already exists in this directory! Skipping video...")
+        i = 1
+        for vid in streams:
+            #print(vid.mediatype=='normal' , vid.extension=='mp4' , str(quality) in vid.quality)
+            path=path
+            if (vid.mediatype=='normal' and vid.extension=='mp4'):
+                if str(quality) in vid.quality:
+                    vid.download(path)
+                    break
+                else:
+                    print(quality, "not found, downloading the next quality of ", streams[i+1].resolution)
+                    streams[i+1].download(path)
+                    break
 
-    try:
-        os.rename(yt.filename + '.mp4', str(file_no) + '.mp4')
-        aud = 'ffmpeg -i ' + str(file_no) + '.mp4' + ' ' + str(file_no) + '.wav'
-        final_audio = 'lame ' + str(file_no) + '.wav' + ' ' + str(file_no) + '.mp3'
-        os.system(aud)
-        os.system(final_audio)
-        os.remove(str(file_no) + '.wav')
-        print("sucessfully converted", yt.filename, "into audio!")
-    except OSError:
-        print(yt.filename, "There is some problem with the file names...")
+        i += 1
 
+        print("successfully downloaded", fileTitle, "!")
+    except OSError:
+        print(fileTitle, "already exists in this directory! Skipping video...")
 
 def printUrls(vid_urls):
     for url in vid_urls:
@@ -98,13 +151,15 @@ def printUrls(vid_urls):
 
 
 if __name__ == '__main__':
-        print("Welcome to Yotube Playlist Downloader.")
+        print("Welcome to Youtube Playlist Downloader.")
         print("Enter playlist url")
-        url = input()
-        url.replace(" ", "")
+        #url = input()
+        #url = url.replace(" ", "")
+        url ="https://www.youtube.com/playlist?list=PLqM7alHXFySH8VivqUPnNFJ0kxgzgHrVb"
 
         print("Enter prefered quality of videos")
-        quality = input()
+        #quality = input()
+        quality=720
 
         print("Enter directory url")
         directory = input()
