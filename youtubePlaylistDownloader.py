@@ -113,18 +113,21 @@ def download_Video_Audio(path, vid_url, quality, file_no):
     try:
         video = pafy.new(vid_url)
     except Exception as e:
-        print("Veronica => T_T Error:", str(e), "- Skipping Video with url '" + vid_url + "'.")
+        print("\nVeronica => T_T Error:", str(e), "- Skipping Video with url '" + vid_url + "'.")
         return
 
     streams = video.streams
+    print("\nVeronica => Found these qualites")
+
     for i in streams:
-        print(i)
+        print("Veronica => ",i)
 
     fileTitle=video.title
 
-    print("Veronica => ^_^ downloading, ", fileTitle + " video")
+    print("\nVeronica => Downloading the normal(video+audio) with mp4 extension")
+    print("\nVeronica => ^_^ downloading, ", fileTitle + " video")
     try:
-        i = 1
+        i = 0
         for vid in streams:
             #print(vid.mediatype=='normal' , vid.extension=='mp4' , str(quality) in vid.quality)
             path=path
@@ -136,7 +139,7 @@ def download_Video_Audio(path, vid_url, quality, file_no):
                     vid.download(path)
                     break
                 else:
-                    print("Veronica => ",quality, "not found, downloading the next quality of ", streams[i+1].resolution)
+                    print("\nVeronica => ",quality, "not found, downloading the next quality of ", streams[i+1].resolution)
                     #bar = progressBar()
                     #bar.print_progress(streams[i+1].get_filesize(), video.length, 0)
                     #bar.print_end()
@@ -145,9 +148,9 @@ def download_Video_Audio(path, vid_url, quality, file_no):
 
         i += 1
 
-        print("Veronica => Successfully downloaded", fileTitle, "!")
+        print("\nVeronica => Successfully downloaded", fileTitle, "!")
     except OSError:
-        print("Veronica => Seems like ", fileTitle, "already exists in this directory! So, I am skipping video...")
+        print("\nVeronica => Seems like ", fileTitle, "already exists in this directory! So, I am skipping video...")
 
 def printUrls(vid_urls):
     for url in vid_urls:
