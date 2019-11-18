@@ -77,7 +77,7 @@ def getPlaylistUrlID(url):
             pl_id = url[eq_idx:amp]
         return pl_id
     else:
-        print(url, "is not a youtube playlist.")
+        print("Veronica => ",url, "is not a youtube playlist. <-_->")
         exit(1)
 
 
@@ -99,11 +99,11 @@ def getPlaylistVideoUrls(page_content, url):
 
     if vid_url_matches:
         final_vid_urls = getFinalVideoUrl(vid_url_matches)
-        print("Found", len(final_vid_urls), "videos in playlist.")
+        print("Veronica => Found", len(final_vid_urls), "videos in playlist. {^$^}")
         printUrls(final_vid_urls)
         return final_vid_urls
     else:
-        print('No videos found.')
+        print('Veronica => No videos found. <-_->')
         exit(1)
 
 
@@ -113,7 +113,7 @@ def download_Video_Audio(path, vid_url, quality, file_no):
     try:
         video = pafy.new(vid_url)
     except Exception as e:
-        print("Error:", str(e), "- Skipping Video with url '" + vid_url + "'.")
+        print("Veronica => T_T Error:", str(e), "- Skipping Video with url '" + vid_url + "'.")
         return
 
     streams = video.streams
@@ -122,7 +122,7 @@ def download_Video_Audio(path, vid_url, quality, file_no):
 
     fileTitle=video.title
 
-    print("downloading", fileTitle + " Video")
+    print("Veronica => ^_^ downloading, ", fileTitle + " video")
     try:
         i = 1
         for vid in streams:
@@ -130,24 +130,24 @@ def download_Video_Audio(path, vid_url, quality, file_no):
             path=path
             if (vid.mediatype=='normal' and vid.extension=='mp4'):
                 if str(quality) in vid.quality:
-                    bar = progressBar()
-                    bar.print_progress(vid.get_filesize(), video.length, 0)
+                    #bar = progressBar()
+                    #bar.print_progress(vid.get_filesize(), video.length, 0)
                     #bar.print_end()
                     vid.download(path)
                     break
                 else:
-                    print(quality, "not found, downloading the next quality of ", streams[i+1].resolution)
-                    bar = progressBar()
-                    bar.print_progress(streams[i+1].get_filesize(), video.length, 0)
+                    print("Veronica => ",quality, "not found, downloading the next quality of ", streams[i+1].resolution)
+                    #bar = progressBar()
+                    #bar.print_progress(streams[i+1].get_filesize(), video.length, 0)
                     #bar.print_end()
                     streams[i+1].download(path)
                     break
 
         i += 1
 
-        print("successfully downloaded", fileTitle, "!")
+        print("Veronica => Successfully downloaded", fileTitle, "!")
     except OSError:
-        print(fileTitle, "already exists in this directory! Skipping video...")
+        print("Veronica => Seems like ", fileTitle, "already exists in this directory! So, I am skipping video...")
 
 def printUrls(vid_urls):
     for url in vid_urls:
@@ -157,19 +157,26 @@ def printUrls(vid_urls):
 
 if __name__ == '__main__':
         print("Welcome to Youtube Video Downloader.")
-        print("1. Video \n2. Playlist")
+        print("Hello, I am Veronica \(^_^)/, your Assistant.")
+        print("Veronica => What would you like to download?")
+
+        print("Veronica => 1. Video \nVeronica => 2. Playlist")
+        print("User => ",end="")
         choice = int(input())
         if choice ==1:
-            print("Enter video url")
+            print("Veronica => Enter video url")
+            print("User => ",end="")
             url = input()
             url = url.replace(" ", "")
             # url ="https://www.youtube.com/playlist?list=PLqM7alHXFySH8VivqUPnNFJ0kxgzgHrVb"
 
-            print("Enter prefered quality of video")
+            print("Veronica => Enter prefered quality of video")
+            print("User => ", end="")
             quality = input()
             # quality=720
 
-            print("Enter directory url")
+            print("Veronica => Enter directory url")
+            print("User => ", end="")
             directory = input()
 
             # make directory if dir specified doesn't exist
@@ -185,16 +192,19 @@ if __name__ == '__main__':
             download_Video_Audio(directory, url, quality, 1)
 
         elif choice == 2:
-            print("Enter playlist url")
+            print("Veronica => Enter playlist url")
+            print("User => ", end="")
             url = input()
             url = url.replace(" ", "")
             # url ="https://www.youtube.com/playlist?list=PLqM7alHXFySH8VivqUPnNFJ0kxgzgHrVb"
 
-            print("Enter prefered quality of videos")
+            print("Veronica => Enter prefered quality of videos")
+            print("User => ", end="")
             quality = input()
             # quality=720
 
-            print("Enter directory url")
+            print("Veronica => Enter directory url")
+            print("User => ", end="")
             directory = input()
 
             # make directory if dir specified doesn't exist
@@ -214,4 +224,4 @@ if __name__ == '__main__':
                 download_Video_Audio(directory, vid_url, quality, i)
                 time.sleep(1)
         else:
-            print("Pls. select from 1 or 2")
+            print("Veronica => OOPS, Pls. select from 1 or 2")
