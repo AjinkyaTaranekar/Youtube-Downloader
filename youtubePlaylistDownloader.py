@@ -102,26 +102,26 @@ def printUrls(vid_urls):
 
 
 if __name__ == '__main__':
-        print("Welcome to Youtube Video Downloader.")
-        print("Hello, I am Veronica \(^_^)/, your Assistant.")
-        print("Veronica => What would you like to download?")
+        print("\nWelcome to Youtube Video Downloader.")
+        print("\nHello, I am Veronica \(^_^)/, your Assistant.")
+        print("\nVeronica => What would you like to download?")
 
-        print("Veronica => 1. Video \nVeronica => 2. Playlist")
+        print("\nVeronica => 1. Video \nVeronica => 2. Playlist")
         print("User => ",end="")
         choice = int(input())
         if choice ==1:
-            print("Veronica => Enter video url")
+            print("\nVeronica => Enter video url")
             print("User => ",end="")
             url = input()
             url = url.replace(" ", "")
             # url ="https://www.youtube.com/playlist?list=PLqM7alHXFySH8VivqUPnNFJ0kxgzgHrVb"
 
-            print("Veronica => Enter prefered quality of video")
+            print("\nVeronica => Enter prefered quality of video")
             print("User => ", end="")
             quality = input()
             # quality=720
 
-            print("Veronica => Enter directory url")
+            print("\nVeronica => Enter directory url")
             print("User => ", end="")
             directory = input()
 
@@ -138,18 +138,18 @@ if __name__ == '__main__':
             download_Video_Audio(directory, url, quality, 1)
 
         elif choice == 2:
-            print("Veronica => Enter playlist url")
+            print("\nVeronica => Enter playlist url")
             print("User => ", end="")
             url = input()
             url = url.replace(" ", "")
             # url ="https://www.youtube.com/playlist?list=PLqM7alHXFySH8VivqUPnNFJ0kxgzgHrVb"
 
-            print("Veronica => Enter prefered quality of videos")
+            print("\nVeronica => Enter prefered quality of videos")
             print("User => ", end="")
             quality = input()
             # quality=720
 
-            print("Veronica => Enter directory url")
+            print("\nVeronica => Enter directory url")
             print("User => ", end="")
             directory = input()
 
@@ -170,4 +170,4 @@ if __name__ == '__main__':
                 download_Video_Audio(directory, vid_url, quality, i)
                 time.sleep(1)
         else:
-            print("Veronica => OOPS, Pls. select from 1 or 2")
+            print("\nVeronica => OOPS, Pls. select from 1 or 2")
