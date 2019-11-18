@@ -8,57 +8,6 @@ import os
 
 import pafy
 
-class progressBar:
-    def __init__(self, barlength=25):
-        self.barlength = barlength
-        self.position = 0
-        self.longest = 0
-
-    def print_progress(self, cur, total, start):
-        currentper = cur / total
-        elapsed = int(time.process_time() - start) + 1
-        curbar = int(currentper * self.barlength)
-        bar = '\r[' + '='.join(['' for _ in range(curbar)])  # Draws Progress
-        bar += '>'
-        bar += ' '.join(['' for _ in range(int(self.barlength - curbar))]) + '] '  # Pads remaining space
-        bar += bytestostr(cur / elapsed) + '/s '  # Calculates Rate
-        bar += getHumanTime((total - cur) * (elapsed / cur)) + ' left'  # Calculates Remaining time
-        if len(bar) > self.longest:  # Keeps track of space to over write
-            self.longest = len(bar)
-            bar += ' '.join(['' for _ in range(self.longest - len(bar))])
-        sys.stdout.write(bar)
-
-    def print_end(self, *args):  # Clears Progress Bar
-        sys.stdout.write('\r{0}\r'.format((' ' for _ in range(self.longest))))
-
-
-def getHumanTime(sec):
-    if sec >= 3600:  # Converts to Hours
-        return '{0:d} hour(s)'.format(int(sec / 3600))
-    elif sec >= 60:  # Converts to Minutes
-        return '{0:d} minute(s)'.format(int(sec / 60))
-    else:  # No Conversion
-        return '{0:d} second(s)'.format(int(sec))
-
-
-def bytestostr(bts):
-    bts = float(bts)
-    if bts >= 1024 ** 4:  # Converts to Terabytes
-        terabytes = bts / 1024 ** 4
-        size = '%.2fTb' % terabytes
-    elif bts >= 1024 ** 3:  # Converts to Gigabytes
-        gigabytes = bts / 1024 ** 3
-        size = '%.2fGb' % gigabytes
-    elif bts >= 1024 ** 2:  # Converts to Megabytes
-        megabytes = bts / 1024 ** 2
-        size = '%.2fMb' % megabytes
-    elif bts >= 1024:  # Converts to Kilobytes
-        kilobytes = bts / 1024
-        size = '%.2fKb' % kilobytes
-    else:  # No Conversion
-        size = '%.2fb' % bts
-    return size
-
 def getPageHtml(url):
     try:
         yTUBE = urllib.request.urlopen(url).read()
@@ -133,16 +82,10 @@ def download_Video_Audio(path, vid_url, quality, file_no):
             path=path
             if (vid.mediatype=='normal' and vid.extension=='mp4'):
                 if str(quality) in vid.quality:
-                    #bar = progressBar()
-                    #bar.print_progress(vid.get_filesize(), video.length, 0)
-                    #bar.print_end()
                     vid.download(path)
                     break
                 else:
                     print("\nVeronica => ",quality, "not found, downloading the next quality of ", streams[i+1].resolution)
-                    #bar = progressBar()
-                    #bar.print_progress(streams[i+1].get_filesize(), video.length, 0)
-                    #bar.print_end()
                     streams[i+1].download(path)
                     break
 
