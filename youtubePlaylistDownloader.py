@@ -153,13 +153,13 @@ def printUrls(vid_urls):
 if __name__ == '__main__':
         print("Welcome to Youtube Playlist Downloader.")
         print("Enter playlist url")
-        #url = input()
-        #url = url.replace(" ", "")
-        url ="https://www.youtube.com/playlist?list=PLqM7alHXFySH8VivqUPnNFJ0kxgzgHrVb"
+        url = input()
+        url = url.replace(" ", "")
+        #url ="https://www.youtube.com/playlist?list=PLqM7alHXFySH8VivqUPnNFJ0kxgzgHrVb"
 
         print("Enter prefered quality of videos")
-        #quality = input()
-        quality=720
+        quality = input()
+        #quality=720
 
         print("Enter directory url")
         directory = input()
