@@ -96,15 +96,16 @@ def download_Video_Audio(path, vid_url, quality):
 
             i += 1
         #downloading subtitle too.
-        ''' yt = YouTube(vid_url)
+        yt = YouTube(vid_url)
         caption = yt.captions.get_by_language_code('en')
-
+        #print(str(caption.generate_srt_captions()))
+        #'''
         fileSubTitlePath=path+'/'+fileTitle+'.srt'
         file1 = open(fileSubTitlePath, "w")  # write mode
 
         file1.write(str(caption.generate_srt_captions()))
         file1.close()
-        '''
+        #'''
         print("\nVeronica => Successfully downloaded", fileTitle, "!")
     except OSError:
         print("\nVeronica => Seems like ", fileTitle, "already exists in this directory! So, I am skipping video...")
