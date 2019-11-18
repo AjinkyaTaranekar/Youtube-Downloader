@@ -67,15 +67,16 @@ def download_Video_Audio(path, vid_url, quality):
         return
 
     streams = video.streams
+    fileTitle=video.title
+
+    print("\nVeronica => ^_^ downloading, ", fileTitle + " video")
+
     print("\nVeronica => Found these qualites")
 
     for i in streams:
         print("Veronica => ",i)
 
-    fileTitle=video.title
-
     print("\nVeronica => Downloading the normal(video+audio) with mp4 extension")
-    print("\nVeronica => ^_^ downloading, ", fileTitle + " video")
     try:
         i = 0
         for vid in streams:
