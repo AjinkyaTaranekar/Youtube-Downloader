@@ -83,7 +83,10 @@ def download_Video_Audio(path, vid_url, quality):
             #print(vid.mediatype=='normal' , vid.extension=='mp4' , str(quality) in vid.quality)
             path=path
             if (vid.mediatype=='normal' and vid.extension=='mp4'):
-                if str(quality) in vid.quality:
+                if str(720)==str(quality) and str(720) in vid.quality:
+                    vid.download(path)
+                    break
+                elif str(640)==str(quality) and str(640) in vid.quality:
                     vid.download(path)
                     break
                 else:
@@ -127,7 +130,7 @@ if __name__ == '__main__':
             url = url.replace(" ", "")
             # url ="https://www.youtube.com/playlist?list=PLqM7alHXFySH8VivqUPnNFJ0kxgzgHrVb"
 
-            print("\nVeronica => Enter prefered quality of video")
+            print("\nVeronica => Enter prefered quality of video (640p/720p)")
             print("User => ", end="")
             quality = input()
             # quality=720
@@ -155,7 +158,7 @@ if __name__ == '__main__':
             url = url.replace(" ", "")
             # url ="https://www.youtube.com/playlist?list=PLqM7alHXFySH8VivqUPnNFJ0kxgzgHrVb"
 
-            print("\nVeronica => Enter prefered quality of videos")
+            print("\nVeronica => Enter prefered quality of videos (640p/720p)")
             print("User => ", end="")
             quality = input()
             # quality=720
