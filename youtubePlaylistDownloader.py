@@ -63,7 +63,7 @@ def download_Video_Audio(path, vid_url, quality):
     try:
         video = pafy.new(vid_url)
     except Exception as e:
-        print("\nVeronica => T_T Error:", str(e), "- Skipping Video with url '" + vid_url + "'.")
+        print("\nVeronica => T_T Error:", str(e), "- Skipping Video with url '" + str(vid_url) + "'.")
         return
 
     streams = video.streams
@@ -177,7 +177,7 @@ if __name__ == '__main__':
 
             # downloads videos and audios
             for vid_url in enumerate(vid_urls_in_playlist):
-                download_Video_Audio(directory, vid_url, quality)
+                download_Video_Audio(directory, vid_url[1], quality)
                 time.sleep(1)
         else:
             print("\nVeronica => OOPS, Pls. select from 1 or 2")
