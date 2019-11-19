@@ -20,7 +20,8 @@ pip install pytube
 ```
 * Install pafy
 
-```pip install pafy
+```
+pip install pafy
 ```
 * Install youtube-dl
 ```
