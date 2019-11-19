@@ -65,7 +65,7 @@ def getPlaylistVideoUrls(page_content, url):
 
 # function added to get audio files along with the video files from the playlist
 
-def download_Video_Audio(path, vid_url, quality):
+def download_Video_Audio(directoryPath, vid_url, quality):
     try:
         video = pafy.new(vid_url)
     except Exception as e:
@@ -75,6 +75,13 @@ def download_Video_Audio(path, vid_url, quality):
     streams = video.streams
     fileTitle = video.title
 
+    #print(os.path.exists(directoryPath+'/'+fileTitle+'.mp4'))
+
+    #to check it file exist or not
+    if os.path.exists(directoryPath+'/'+fileTitle+'.mp4'):
+        print("\nVeronica => Seems like ", fileTitle, "already exists in this directory! So, I am skipping video...")
+        return
+
     print("\nVeronica => ^_^ downloading, ", fileTitle + " video")
 
     print("\nVeronica => Found these qualites")
@@ -83,32 +90,33 @@ def download_Video_Audio(path, vid_url, quality):
         print("Veronica => ", i)
 
     print("\nVeronica => Downloading the normal(video+audio) with mp4 extension")
-    try:
-        for vid in streams:
-            # print(vid.mediatype=='normal' , vid.extension=='mp4' , str(quality) in vid.quality)
-            path = path
-            if (vid.mediatype == 'normal' and vid.extension == 'mp4'):
-                if str(720) == str(quality) and str(720) in vid.quality:
-                    vid.download(path)
-                    break
-                elif str(640) == str(quality) and str(640) in vid.quality:
-                    vid.download(path)
-                    break
 
-        # downloading subtitle too.
-        yt = YouTube(vid_url)
-        caption = yt.captions.get_by_language_code('en')
-        # print(str(caption.generate_srt_captions()))
-        # '''
-        fileSubTitlePath = path + '/' + fileTitle + '.srt'
-        file1 = open(fileSubTitlePath, "w")  # write mode
+    for vid in streams:
+       # print(vid.mediatype=='normal' , vid.extension=='mp4' , str(quality) in vid.quality)
+       if (vid.mediatype == 'normal' and vid.extension == 'mp4'):
+          if str(720) == str(quality) and str(720) in vid.quality:
+             vid.download(directoryPath)
+             break
+          elif str(640) == str(quality) and str(640) in vid.quality:
+             vid.download(directoryPath)
+             break
 
-        file1.write(str(caption.generate_srt_captions()))
-        file1.close()
-        # '''
-        print("\nVeronica => Successfully downloaded", fileTitle, "!")
-    except OSError:
-        print("\nVeronica => Seems like ", fileTitle, "already exists in this directory! So, I am skipping video...")
+       # downloading subtitle too.
+       try:
+          yt = YouTube(vid_url)
+          caption = yt.captions.get_by_language_code('en')
+          # print(str(caption.generate_srt_captions()))
+          # '''
+          fileSubTitlePath = directoryPath + '/' + fileTitle + '.srt'
+          file1 = open(fileSubTitlePath, "w")  # write mode
+
+          file1.write(str(caption.generate_srt_captions()))
+          file1.close()
+          # '''
+       except Exception:
+            print("\nVeronica => Seems like subtitle not available for ", fileTitle," So, I am skipping subtitile...")
+
+       print("\nVeronica => Successfully downloaded", fileTitle, "!")
 
 
 if __name__ == '__main__':
