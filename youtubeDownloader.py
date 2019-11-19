@@ -48,11 +48,11 @@ def getPlaylistVideoUrls(page_content, url):
 
     if vid_url_matches:
         final_vid_urls = getFinalVideoUrl(vid_url_matches)
-        print("Veronica => Found", len(final_vid_urls), "videos in playlist. {^$^}")
+        print("\nVeronica => Found", len(final_vid_urls), "videos in playlist. {^$^}")
         printVideoTitle(final_vid_urls)
         return final_vid_urls
     else:
-        print('Veronica => No videos found. <-_->')
+        print('\nVeronica => No videos found. <-_->')
         exit(1)
 
 
@@ -188,10 +188,12 @@ if __name__ == '__main__':
             print("User => ", end="")
             range = input()
             start, end = range.split('-')
-
+        print(vid_urls_in_playlist[2],type(vid_urls_in_playlist))
         # downloads videos and audios
-        for vid_url in enumerate(vid_urls_in_playlist[start], vid_urls_in_playlist[end] + 1):
-            download_Video_Audio(directory, vid_url[1], quality)
-            time.sleep(1)
+        for index in range(5):
+            vid_url=vid_urls_in_playlist[index]
+            print(vid_url)
+            '''download_Video_Audio(directory, vid_url[1], quality)
+            time.sleep(1)'''
     else:
         print("\nVeronica => OOPS, Pls. select from 1 or 2")
