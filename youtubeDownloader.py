@@ -2,7 +2,6 @@ import urllib.request
 import urllib.error
 
 import re
-import sys
 import time
 import os
 
@@ -27,7 +26,7 @@ def getPlaylistUrlID(url):
             pl_id = url[eq_idx:amp]
         return pl_id
     else:
-        print("Veronica => ",url, "is not a youtube playlist. <-_->")
+        print("Veronica => ", url, "is not a youtube playlist. <-_->")
         exit(1)
 
 
@@ -67,41 +66,43 @@ def download_Video_Audio(path, vid_url, quality):
         return
 
     streams = video.streams
-    fileTitle=video.title
+    fileTitle = video.title
 
     print("\nVeronica => ^_^ downloading, ", fileTitle + " video")
 
     print("\nVeronica => Found these qualites")
 
     for i in streams:
-        print("Veronica => ",i)
+        print("Veronica => ", i)
 
     print("\nVeronica => Downloading the normal(video+audio) with mp4 extension")
     try:
         for vid in streams:
-            #print(vid.mediatype=='normal' , vid.extension=='mp4' , str(quality) in vid.quality)
-            path=path
-            if (vid.mediatype=='normal' and vid.extension=='mp4'):
-                if str(720)==str(quality) and str(720) in vid.quality:
+            # print(vid.mediatype=='normal' , vid.extension=='mp4' , str(quality) in vid.quality)
+            path = path
+            if (vid.mediatype == 'normal' and vid.extension == 'mp4'):
+                if str(720) == str(quality) and str(720) in vid.quality:
                     vid.download(path)
                     break
-                elif str(640)==str(quality) and str(640) in vid.quality:
+                elif str(640) == str(quality) and str(640) in vid.quality:
                     vid.download(path)
                     break
-        #downloading subtitle too.
+
+        # downloading subtitle too.
         yt = YouTube(vid_url)
         caption = yt.captions.get_by_language_code('en')
-        #print(str(caption.generate_srt_captions()))
-        #'''
-        fileSubTitlePath=path+'/'+fileTitle+'.srt'
+        # print(str(caption.generate_srt_captions()))
+        # '''
+        fileSubTitlePath = path + '/' + fileTitle + '.srt'
         file1 = open(fileSubTitlePath, "w")  # write mode
 
         file1.write(str(caption.generate_srt_captions()))
         file1.close()
-        #'''
+        # '''
         print("\nVeronica => Successfully downloaded", fileTitle, "!")
     except OSError:
         print("\nVeronica => Seems like ", fileTitle, "already exists in this directory! So, I am skipping video...")
+
 
 def printUrls(vid_urls):
     for url in vid_urls:
@@ -110,78 +111,78 @@ def printUrls(vid_urls):
 
 
 if __name__ == '__main__':
-        print("\nWelcome to Youtube Video Downloader.")
-        print("\nHello, I am Veronica \(^_^)/, your Assistant.")
-        print("\nVeronica => What would you like to download?")
+    print("\nWelcome to Youtube Video Downloader.")
+    print("\nHello, I am Veronica \(^_^)/, your Assistant.")
+    print("\nVeronica => What would you like to download?")
 
-        print("\nVeronica => 1. Video \nVeronica => 2. Playlist")
-        print("User => ",end="")
-        choice = int(input())
-        if choice ==1:
-            print("\nVeronica => Enter video url")
-            print("User => ",end="")
-            url = input()
-            url = url.replace(" ", "")
-            # url ="https://www.youtube.com/playlist?list=PLqM7alHXFySH8VivqUPnNFJ0kxgzgHrVb"
+    print("\nVeronica => 1. Video \nVeronica => 2. Playlist")
+    print("User => ", end="")
+    choice = int(input())
+    if choice == 1:
+        print("\nVeronica => Enter video url")
+        print("User => ", end="")
+        url = input()
+        url = url.replace(" ", "")
+        # url ="https://www.youtube.com/playlist?list=PLqM7alHXFySH8VivqUPnNFJ0kxgzgHrVb"
 
-            print("\nVeronica => Enter prefered quality of video (640p/720p)")
-            print("User => ", end="")
-            quality = input()
-            # quality=720
+        print("\nVeronica => Enter prefered quality of video (640p/720p)")
+        print("User => ", end="")
+        quality = input()
+        # quality=720
 
-            print("\nVeronica => Enter directory url")
-            print("User => ", end="")
-            directory = input()
+        print("\nVeronica => Enter directory url")
+        print("User => ", end="")
+        directory = input()
 
-            # make directory if dir specified doesn't exist
-            try:
-                os.makedirs(directory, exist_ok=True)
-            except OSError as e:
-                print(e.reason)
-                exit(1)
+        # make directory if dir specified doesn't exist
+        try:
+            os.makedirs(directory, exist_ok=True)
+        except OSError as e:
+            print(e.reason)
+            exit(1)
 
-            if not url.startswith("http"):
-                url = 'https://' + url
+        if not url.startswith("http"):
+            url = 'https://' + url
 
-            download_Video_Audio(directory, url, quality)
+        download_Video_Audio(directory, url, quality)
 
-        elif choice == 2:
-            print("\nVeronica => Enter playlist url")
-            print("User => ", end="")
-            url = input()
-            url = url.replace(" ", "")
-            # url ="https://www.youtube.com/playlist?list=PLqM7alHXFySH8VivqUPnNFJ0kxgzgHrVb"
+    elif choice == 2:
+        print("\nVeronica => Enter playlist url")
+        print("User => ", end="")
+        url = input()
+        url = url.replace(" ", "")
+        # url ="https://www.youtube.com/playlist?list=PLqM7alHXFySH8VivqUPnNFJ0kxgzgHrVb"
 
-            print("\nVeronica => Enter prefered quality of videos (640p/720p)")
-            print("User => ", end="")
-            quality = input()
-            # quality=720
+        print("\nVeronica => Enter prefered quality of videos (640p/720p)")
+        print("User => ", end="")
+        quality = input()
+        # quality=720
 
-            print("\nVeronica => Enter directory url")
-            print("User => ", end="")
-            directory = input()
+        print("\nVeronica => Enter directory url")
+        print("User => ", end="")
+        directory = input()
 
-            print("\nVeronica => Enter range for playlist, in format (start-last)")
-            print("User => ", end="")
-            range = input()
+        print("\nVeronica => Enter range for playlist, in format (start-last)")
+        print("User => ", end="")
+        range = input()
 
-            start,end=range.split('-')
+        start, end = range.split('-')
 
-            # make directory if dir specified doesn't exist
-            try:
-                os.makedirs(directory, exist_ok=True)
-            except OSError as e:
-                print(e.reason)
-                exit(1)
+        # make directory if dir specified doesn't exist
+        try:
+            os.makedirs(directory, exist_ok=True)
+        except OSError as e:
+            print(e.reason)
+            exit(1)
 
-            if not url.startswith("http"):
-                url = 'https://' + url
-            playlist_page_content = getPageHtml(url)
-            vid_urls_in_playlist = getPlaylistVideoUrls(playlist_page_content, url)
+        if not url.startswith("http"):
+            url = 'https://' + url
+        playlist_page_content = getPageHtml(url)
+        vid_urls_in_playlist = getPlaylistVideoUrls(playlist_page_content, url)
 
-            # downloads videos and audios
-            for vid_url in enumerate(vid_urls_in_playlist[start],vid_urls_in_playlist[end]+1):
-                download_Video_Audio(directory, vid_url[1], quality)
-                time.sleep(1)
-        else:
-            print("\nVeronica => OOPS, Pls. select from 1 or 2")
+        # downloads videos and audios
+        for vid_url in enumerate(vid_urls_in_playlist[start], vid_urls_in_playlist[end] + 1):
+            download_Video_Audio(directory, vid_url[1], quality)
+            time.sleep(1)
+    else:
+        print("\nVeronica => OOPS, Pls. select from 1 or 2")
