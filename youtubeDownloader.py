@@ -1,12 +1,12 @@
-import urllib.request
-import urllib.error
-
+import os
 import re
 import time
-import os
+import urllib.error
+import urllib.request
 
 import pafy
 from pytube import YouTube
+
 
 def getPageHtml(url):
     try:
@@ -41,11 +41,12 @@ def getFinalVideoUrl(vid_urls):
 
 
 def printVideoTitle(vid_urls):
-    i=1
+    i = 1
     for url in vid_urls:
         video = pafy.new(url)
-        print(i,". ",video.title," => ",url)
-        i+=1
+        print(i, ". ", video.title, " => ", url)
+        i += 1
+
 
 def getPlaylistVideoUrls(page_content, url):
     playlist_id = getPlaylistUrlID(url)
@@ -75,10 +76,10 @@ def download_Video_Audio(directoryPath, vid_url, quality):
     streams = video.streams
     fileTitle = video.title
 
-    #print(os.path.exists(directoryPath+'/'+fileTitle+'.mp4'))
+    # print(os.path.exists(directoryPath+'/'+fileTitle+'.mp4'))
 
-    #to check it file exist or not
-    if os.path.exists(directoryPath+'/'+fileTitle+'.mp4'):
+    # to check it file exist or not
+    if os.path.exists(directoryPath + '/' + fileTitle + '.mp4'):
         print("\nVeronica => Seems like ", fileTitle, "already exists in this directory! So, I am skipping video...")
         return
 
@@ -92,31 +93,30 @@ def download_Video_Audio(directoryPath, vid_url, quality):
     print("\nVeronica => Downloading the normal(video+audio) with mp4 extension")
 
     for vid in streams:
-       # print(vid.mediatype=='normal' , vid.extension=='mp4' , str(quality) in vid.quality)
-       if (vid.mediatype == 'normal' and vid.extension == 'mp4'):
-          if str(720) == str(quality) and str(720) in vid.quality:
-             vid.download(directoryPath)
-             break
-          elif str(640) == str(quality) and str(640) in vid.quality:
-             vid.download(directoryPath)
-             break
+        # print(vid.mediatype=='normal' , vid.extension=='mp4' , str(quality) in vid.quality)
+        if (vid.mediatype == 'normal' and vid.extension == 'mp4'):
+            if str(720) == str(quality) and str(720) in vid.quality:
+                vid.download(directoryPath)
+                break
+            elif str(640) == str(quality) and str(640) in vid.quality:
+                vid.download(directoryPath)
+                break
+        # downloading subtitle too.
+        try:
+            yt = YouTube(vid_url)
+            caption = yt.captions.get_by_language_code('en')
+            # print(str(caption.generate_srt_captions()))
+            # '''
+            fileSubTitlePath = directoryPath + '/' + fileTitle + '.srt'
+            file1 = open(fileSubTitlePath, "w")  # write mode
 
-       # downloading subtitle too.
-       try:
-          yt = YouTube(vid_url)
-          caption = yt.captions.get_by_language_code('en')
-          # print(str(caption.generate_srt_captions()))
-          # '''
-          fileSubTitlePath = directoryPath + '/' + fileTitle + '.srt'
-          file1 = open(fileSubTitlePath, "w")  # write mode
+            file1.write(str(caption.generate_srt_captions()))
+            file1.close()
+            # '''
+        except Exception:
+            print("\nVeronica => Seems like subtitle not available for ", fileTitle, " So, I am skipping subtitile...")
 
-          file1.write(str(caption.generate_srt_captions()))
-          file1.close()
-          # '''
-       except Exception:
-            print("\nVeronica => Seems like subtitle not available for ", fileTitle," So, I am skipping subtitile...")
-
-       print("\nVeronica => Successfully downloaded", fileTitle, "!")
+        print("\nVeronica => Successfully downloaded", fileTitle, "!")
 
 
 if __name__ == '__main__':
@@ -187,8 +187,8 @@ if __name__ == '__main__':
         print("User => ", end="")
         choiceForRange = input()
         if choiceForRange == 'yes' or choiceForRange == 'y':
-            start=1
-            end=len(vid_urls_in_playlist)
+            start = 1
+            end = len(vid_urls_in_playlist)
         else:
             print("\nVeronica => Enter range for playlist, in format (start-last)")
             print("User => ", end="")
@@ -196,9 +196,9 @@ if __name__ == '__main__':
             start, end = rangeOfPlaylist.split('-')
         # print(vid_urls_in_playlist[2],type(vid_urls_in_playlist))
         # downloads videos and audios
-        for index in range(int(start)-1,int(end)):
-            vid_url=vid_urls_in_playlist[index]
-            #print(vid_url)
+        for index in range(int(start) - 1, int(end)):
+            vid_url = vid_urls_in_playlist[index]
+            # print(vid_url)
             download_Video_Audio(directory, vid_url, quality)
             time.sleep(1)
     else:
