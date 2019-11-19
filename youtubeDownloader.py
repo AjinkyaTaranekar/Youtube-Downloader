@@ -49,7 +49,7 @@ def getPlaylistVideoUrls(page_content, url):
     if vid_url_matches:
         final_vid_urls = getFinalVideoUrl(vid_url_matches)
         print("Veronica => Found", len(final_vid_urls), "videos in playlist. {^$^}")
-        printUrls(final_vid_urls)
+        printVideoTitle(final_vid_urls)
         return final_vid_urls
     else:
         print('Veronica => No videos found. <-_->')
@@ -104,9 +104,12 @@ def download_Video_Audio(path, vid_url, quality):
         print("\nVeronica => Seems like ", fileTitle, "already exists in this directory! So, I am skipping video...")
 
 
-def printUrls(vid_urls):
+def printVideoTitle(vid_urls):
+    i=1
     for url in vid_urls:
-        print(url)
+        video = pafy.new(url)
+        print(i,". ",video.title)
+        i+=1
         time.sleep(0.04)
 
 
