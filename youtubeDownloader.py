@@ -78,7 +78,6 @@ def download_Video_Audio(path, vid_url, quality):
 
     print("\nVeronica => Downloading the normal(video+audio) with mp4 extension")
     try:
-        i = 0
         for vid in streams:
             #print(vid.mediatype=='normal' , vid.extension=='mp4' , str(quality) in vid.quality)
             path=path
@@ -89,12 +88,6 @@ def download_Video_Audio(path, vid_url, quality):
                 elif str(640)==str(quality) and str(640) in vid.quality:
                     vid.download(path)
                     break
-                else:
-                    print("\nVeronica => ",quality, "not found, downloading the next quality of ", streams[i+1].resolution)
-                    streams[i+1].download(path)
-                    break
-
-            i += 1
         #downloading subtitle too.
         yt = YouTube(vid_url)
         caption = yt.captions.get_by_language_code('en')
