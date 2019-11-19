@@ -162,12 +162,6 @@ if __name__ == '__main__':
         print("User => ", end="")
         directory = input()
 
-        print("\nVeronica => Enter range for playlist, in format (start-last)")
-        print("User => ", end="")
-        range = input()
-
-        start, end = range.split('-')
-
         # make directory if dir specified doesn't exist
         try:
             os.makedirs(directory, exist_ok=True)
@@ -179,6 +173,18 @@ if __name__ == '__main__':
             url = 'https://' + url
         playlist_page_content = getPageHtml(url)
         vid_urls_in_playlist = getPlaylistVideoUrls(playlist_page_content, url)
+
+        print("\nVeronica => Do you want to download whole playlist or a part of? (yes/no)")
+        print("User => ", end="")
+        choiceForRange = input()
+        if choiceForRange == 'yes' or choiceForRange == 'y':
+            start=0
+            end=len(vid_urls_in_playlist)
+        else:
+            print("\nVeronica => Enter range for playlist, in format (start-last)")
+            print("User => ", end="")
+            range = input()
+            start, end = range.split('-')
 
         # downloads videos and audios
         for vid_url in enumerate(vid_urls_in_playlist[start], vid_urls_in_playlist[end] + 1):
