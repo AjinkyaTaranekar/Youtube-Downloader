@@ -40,6 +40,13 @@ def getFinalVideoUrl(vid_urls):
     return final_urls
 
 
+def printVideoTitle(vid_urls):
+    i=1
+    for url in vid_urls:
+        video = pafy.new(url)
+        print(i,". ",video.title," => ",url)
+        i+=1
+
 def getPlaylistVideoUrls(page_content, url):
     playlist_id = getPlaylistUrlID(url)
 
@@ -102,15 +109,6 @@ def download_Video_Audio(path, vid_url, quality):
         print("\nVeronica => Successfully downloaded", fileTitle, "!")
     except OSError:
         print("\nVeronica => Seems like ", fileTitle, "already exists in this directory! So, I am skipping video...")
-
-
-def printVideoTitle(vid_urls):
-    i=1
-    for url in vid_urls:
-        video = pafy.new(url)
-        print(i,". ",video.title)
-        i+=1
-        time.sleep(0.04)
 
 
 if __name__ == '__main__':
@@ -181,19 +179,19 @@ if __name__ == '__main__':
         print("User => ", end="")
         choiceForRange = input()
         if choiceForRange == 'yes' or choiceForRange == 'y':
-            start=0
+            start=1
             end=len(vid_urls_in_playlist)
         else:
             print("\nVeronica => Enter range for playlist, in format (start-last)")
             print("User => ", end="")
-            range = input()
-            start, end = range.split('-')
-        print(vid_urls_in_playlist[2],type(vid_urls_in_playlist))
+            rangeOfPlaylist = input()
+            start, end = rangeOfPlaylist.split('-')
+        # print(vid_urls_in_playlist[2],type(vid_urls_in_playlist))
         # downloads videos and audios
-        for index in range(5):
+        for index in range(int(start)-1,int(end)):
             vid_url=vid_urls_in_playlist[index]
-            print(vid_url)
-            '''download_Video_Audio(directory, vid_url[1], quality)
-            time.sleep(1)'''
+            #print(vid_url)
+            download_Video_Audio(directory, vid_url, quality)
+            time.sleep(1)
     else:
         print("\nVeronica => OOPS, Pls. select from 1 or 2")
